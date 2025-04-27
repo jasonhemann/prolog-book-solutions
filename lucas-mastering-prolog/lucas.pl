@@ -487,26 +487,33 @@ last_elem(X,[_,Y1|L]) :- last_elem(X,[Y1|L]).
 % List2 \ List1 = List3
 %
 % TODO: check sethood (as we recur down the lists).
-%
-lset_difference([],L,L).
-lset_difference([X|Rest],Input,Output) :-
-	lset_difference(Rest,Input,Res),
-	tfilter(dif(X),Res,Output).
+% TODO: literally a difference list--so use DCG?
 
-lset_intersect(L1,L2,L) :-
-	lset_difference(L1,L2,L3),
-	lset_difference(L2,L3,L).
+lset_difference([],_,[]).
+lset_difference([X|Xs],Rem,Out) :-
+	lset_difference(Xs,Rem,Out0),
+	if_(memberd_t(X,Rem),
+		Out0 = Out,
+		Out = [X|Out0]).
+
+%% ?- length(Ls,_), append(X,Y,Ls), lset_difference(Y,X,"abcd").
+
+lset_intersect(L0,L1,L) :-
+	lset_difference(L0,L1,L2),
+	lset_difference(L1,L2,L).
 
 % 6.6
 
-%% lset_union(L1,L2,L) :-
-%% 	lset_difference(L1,L2,L3),
-%% 	append(L3,L2,L).
+%% lset_union(L0,L1,L) :-
+%% 	lset_difference(L0,L1,L2),
+%% 	append(L2,L1,L).
 
 %% Fuses the append and set_diff
 %%
 lset_union([],L,L).
-lset_union([X|L1],L0,[X|L]) :- lset_union(L1,L0,L2), tfilter(dif(X),L2,L).
+lset_union([X|L1],L0,[X|L]) :-
+	lset_union(L1,L0,L2),
+	tfilter(dif(X),L2,L).
 
 %% 6.7
 
