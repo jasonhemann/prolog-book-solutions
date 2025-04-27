@@ -11,7 +11,7 @@
 :- use_module(library(si)).
 :- initialization(asserta(clpz:monotonic)).
 
-%% Chapter 2
+%% Chapter 1
 
 :- discontiguous(car/7).
 
@@ -53,6 +53,9 @@ abc(X,Y,_) :- car(X,Y,_,_,_,_,_).
 supplier(ford,uk,'21 Tingate, Dagenham','0181 233 4821').
 supplier(rover,uk,'18 Beadle Road, Cowley','01325 24112').
 supplier(fiat,italy,'333 Via Alphonse, Turin','0101 888 376 3983').
+
+
+%% Chapter 2
 
 risk_for_capacity(Capacity,1) :- #Capacity #< 1000.
 risk_for_capacity(Capacity,2) :- #Capacity #< 1300, #Capacity #>= 1000.
@@ -613,9 +616,9 @@ one_char_away(String1,String2) :- replace(_,_,String1,String2).
 
 %% near_miss(?Word)/2
 %
-% A word is a near miss if it at most one character
+% A word is a near miss if it exactly one char away
 % away from a word in our database.
-near_miss(Word,Word2) :-
+near_miss(Word) :-
 	atom_chars(Word,String1),
 	word(Word2),
 	atom_chars(Word2,String2),
